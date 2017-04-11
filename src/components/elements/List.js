@@ -1,5 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import { Link } from 'react-router-dom'
 import glamorous from 'glamorous'
 import colors from '../../constants/colors'
 
@@ -18,11 +19,15 @@ const StyledListItem = glamorous.li({
   }
 })
 
-const List = ({items}) => {
+const List = ({items, link}) => {
   return (
     <StyledList>
       {items.map(item => {
-        return <StyledListItem>{item.name}</StyledListItem>
+        return (
+          <StyledListItem>
+            <Link to={`${link}/${item.id}`}>{item.name}</Link>
+          </StyledListItem>
+        )
       })}
     </StyledList>
   )

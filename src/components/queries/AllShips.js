@@ -9,7 +9,7 @@ class AllShips extends React.Component {
 
     if (!data.loading) {
       return (
-        <List items={data.allShips}/>
+        <List items={data.allShips} link="/ships"/>
       )
     }
 

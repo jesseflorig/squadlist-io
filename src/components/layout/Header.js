@@ -3,6 +3,10 @@ import { Link } from 'react-router-dom'
 import glamorous from 'glamorous'
 
 const StyledHeader = glamorous.div({
+  position: 'fixed',
+  top: 0,
+  left: 0,
+  width: '100%',
   backgroundColor: 'black',
   padding: '.5rem'
 })
