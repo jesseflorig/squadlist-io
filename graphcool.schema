@@ -1,0 +1,138 @@
+type Condition {
+  createdAt: DateTime!
+  id: ID!
+  image: String
+  name: String!
+  oldId: Int
+  text: String
+  unique: Boolean!
+  updatedAt: DateTime!
+  upgrade: Upgrade @relation(name: "UpgradeCondition")
+  xws: String
+}
+
+type Damage {
+  createdAt: DateTime!
+  id: ID!
+  name: String!
+  qtyCore: Int!
+  qtyTFA: Int!
+  text: String!
+  type: String!
+  updatedAt: DateTime!
+}
+
+type Faction {
+  createdAt: DateTime!
+  id: ID!
+  name: String!
+  ships: [Ship!]! @relation(name: "FactionShips")
+  updatedAt: DateTime!
+  xws: String
+}
+
+type File {
+  contentType: String!
+  createdAt: DateTime!
+  id: ID!
+  name: String!
+  secret: String!
+  size: Int!
+  updatedAt: DateTime!
+  url: String!
+}
+
+type Pilot {
+  createdAt: DateTime!
+  faction: String!
+  id: ID!
+  image: String
+  name: String!
+  oldId: Int
+  points: Int!
+  ship: Ship @relation(name: "ShipPilots")
+  skill: Int!
+  text: String!
+  unique: Boolean!
+  updatedAt: DateTime!
+  xws: String!
+}
+
+type Product {
+  announceDate: DateTime
+  contents: Json
+  createdAt: DateTime!
+  id: ID!
+  image: String
+  name: String!
+  oldId: Int
+  releaseDate: DateTime
+  released: Boolean!
+  sku: String!
+  thumb: String
+  updatedAt: DateTime!
+  wave: String
+}
+
+type Reference {
+  createdAt: DateTime!
+  id: ID!
+  image: String
+  oldId: Int
+  subtitle: String
+  title: String!
+  updatedAt: DateTime!
+}
+
+type Ship {
+  actions: [String!]!
+  agility: Int!
+  attack: Int!
+  createdAt: DateTime!
+  faction: Faction @relation(name: "FactionShips")
+  hull: Int!
+  id: ID!
+  maneuvers: [Int!]!
+  name: String!
+  oldId: Int
+  pilots: [Pilot!]! @relation(name: "ShipPilots")
+  shields: Int!
+  size: String!
+  slots: [Slot!]! @relation(name: "ShipsSlots")
+  updatedAt: DateTime!
+  xws: String!
+}
+
+type Slot {
+  createdAt: DateTime!
+  id: ID!
+  name: String!
+  ships: [Ship!]! @relation(name: "ShipsSlots")
+  shorthand: String
+  updatedAt: DateTime!
+  upgrades: [Upgrade!]! @relation(name: "SlotUpgrades")
+  xws: String
+}
+
+type Upgrade {
+  attack: Int
+  conditions: [Condition!]! @relation(name: "UpgradeCondition")
+  createdAt: DateTime!
+  id: ID!
+  images: String
+  name: String!
+  oldId: Int
+  points: Int!
+  range: String
+  slot: Slot @relation(name: "SlotUpgrades")
+  text: String
+  unique: Boolean!
+  updatedAt: DateTime!
+  xws: String!
+}
+
+type User {
+  createdAt: DateTime!
+  id: ID!
+  updatedAt: DateTime!
+}

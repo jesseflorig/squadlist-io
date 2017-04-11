@@ -1,0 +1,54 @@
+{
+  "name": "squadlist-io",
+  "version": "1.0.0",
+  "description": "An X-Wing TMG  squad builder",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "NODE_ENV=dev babel-node --debug ./dev.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jesseflorig/squadlist-io.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/jesseflorig/squadlist-io/issues"
+  },
+  "homepage": "https://github.com/jesseflorig/squadlist-io#readme",
+  "dependencies": {
+    "apollo-client": "^1.0.2",
+    "body-parser": "^1.17.1",
+    "config": "^1.25.1",
+    "express": "^4.15.2",
+    "react": "^15.4.2",
+    "react-apollo": "^1.0.1",
+    "react-dom": "^15.4.2",
+    "react-hot-loader": "^3.0.0-beta.6",
+    "react-router": "^4.0.0",
+    "react-router-dom": "^4.0.0",
+    "react-router-redux": "^5.0.0-alpha.4",
+    "redux": "^3.6.0"
+  },
+  "devDependencies": {
+    "babel-core": "^6.24.1",
+    "babel-loader": "^6.4.1",
+    "babel-plugin-transform-decorators-legacy": "^1.3.4",
+    "babel-polyfill": "^6.23.0",
+    "babel-preset-env": "^1.3.2",
+    "babel-preset-react": "^6.24.1",
+    "eslint": "^3.19.0",
+    "eslint-plugin-react": "^6.10.3",
+    "extract-text-webpack-plugin": "^2.1.0",
+    "html-webpack-plugin": "^2.28.0",
+    "json-loader": "^0.5.4",
+    "postcss-loader": "^1.3.3",
+    "react-hot-loader": "^3.0.0-beta.6",
+    "style-loader": "^0.16.1",
+    "webpack": "^2.3.3",
+    "webpack-dev-middleware": "^1.10.1",
+    "webpack-hot-middleware": "^2.18.0",
+    "write-file-webpack-plugin": "^4.0.0"
+  }
+}
