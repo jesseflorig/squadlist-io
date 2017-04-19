@@ -5,6 +5,7 @@ import { ApolloProvider } from 'react-apollo'
 import { createStore, combineReducers, applyMiddleware, compose } from 'redux'
 import Config from './config.js'
 import App from './components/App.js'
+import squadReducer from './state/reducers/squadReducer'
 
 const graphCoolKey = Config.get().graphcool.key
 const networkInterface = createNetworkInterface({
@@ -31,7 +32,8 @@ const client = new ApolloClient({
 
 const store = createStore(
   combineReducers({
-    apollo: client.reducer()
+    apollo: client.reducer(),
+    squad: squadReducer
   }),
   {},
   compose(

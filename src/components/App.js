@@ -14,8 +14,6 @@ const StyledPage = glamorous.div({
 
 class App extends React.Component {
   render() {
-    console.log(this.props.userQuery.loading)
-    console.log(this.props.userQuery.user)
     return (
       <Router>
         <div>

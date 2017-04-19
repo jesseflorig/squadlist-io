@@ -68,7 +68,7 @@ class LoginButton extends React.Component {
 }
 
 const createUserMutation = gql`
-  mutation ($idToken: String!){
+  mutation ($idToken: String){
     createUser(authProvider: {auth0: {idToken: $idToken}}) {
       id
     }
