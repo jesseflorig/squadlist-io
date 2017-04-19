@@ -1,0 +1,10 @@
+{
+  "graphcool": {
+    "key": ""
+  },
+  "auth": {
+    "domain": "",
+    "clientID": "",
+    "secret": ""
+  }
+}
