@@ -1,5 +1,6 @@
 import React from 'react'
-import { BrowserRouter as Router, Route } from 'react-router-dom'
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
+import { gql, graphql } from 'react-apollo'
 import Header from './layout/Header'
 import HomePage from './pages/Home'
 import ShipsPage from './pages/Ships'
@@ -10,17 +11,22 @@ const StyledPage = glamorous.div({
   marginTop: '4rem'
 })
 
+
 class App extends React.Component {
   render() {
+    console.log(this.props.userQuery.loading)
+    console.log(this.props.userQuery.user)
     return (
       <Router>
         <div>
-          <Header/>
+          <Header userQuery={this.props.userQuery} />
 
           <StyledPage>
-            <Route exact path="/" component={HomePage}/>
-            <Route exact path="/ships" component={ShipsPage}/>
-            <Route exact path="/ships/:shipId" component={ShipPage}/>
+            <Switch>
+              <Route exact path="/" component={HomePage}/>
+              <Route exact path="/ships" component={ShipsPage}/>
+              <Route exact path="/ships/:shipId" component={ShipPage}/>
+            </Switch>
           </StyledPage>
         </div>
       </Router>
@@ -28,4 +34,19 @@ class App extends React.Component {
   }
 }
 
-export default App
+const userQuery = gql`
+  query userQuery{
+    user{
+      id
+    }
+  }
+`
+
+const AppWithData = graphql(userQuery, {
+  name: 'userQuery',
+  options: {
+    fetchPolicy: 'network-only'
+  }
+})(App)
+
+export default AppWithData

@@ -1,10 +1,21 @@
 import React from 'react'
 import Wrapper from '../layout/Wrapper'
+import Button from '../elements/Button'
+import CreateIcon from '../icons/createIcon'
 
 const HomePage = () => {
+
+  const handleClick = (e) => {
+    console.log(e)
+  }
+
   return (
     <Wrapper>
-      <h1>HomePage</h1>
+      <Button
+        text="New Squad"
+        type="primary"
+        onClick={handleClick}
+        icon={<CreateIcon color="white"/>}/>
     </Wrapper>
   )
 }
