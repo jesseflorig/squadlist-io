@@ -12,7 +12,8 @@ const StyledHeader = glamorous.div({
   left: 0,
   width: '100%',
   backgroundColor: 'black',
-  padding: '.5rem'
+  padding: '.5rem',
+  zIndex: '100'
 })
 
 const NavList = glamorous.ul({

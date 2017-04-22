@@ -3,6 +3,9 @@ import Wrapper from '../layout/Wrapper'
 import Button from '../elements/Button'
 import CreateIcon from '../icons/createIcon'
 import Select from '../elements/forms/select'
+import Grid from '../layout/Grid'
+import GridItem from '../layout/GridItem'
+import CardList from '../elements/CardList'
 import { connect } from 'react-redux'
 import { activateBuilder, setFaction } from '../../state/actions/squadActions'
 import { gql, graphql, compose } from 'react-apollo'
@@ -28,18 +31,28 @@ const HomePage = ({
         onClick={handleActivateClick}
         icon={<CreateIcon color="white"/>}/>
 
-      {squad.isActive &&
-        <div>
-          <Select onChange={handleChangeFaction}>
-            {FactionQuery.allFactions.map(faction => {
-              return <option value={faction.id}>{faction.name}</option>
-            })}
-          </Select>
 
-          {ShipQuery.allShips.map(ship => {
-            return <p>{ship.name}</p>
-          })}
-        </div>
+      {squad.isActive &&
+        <Grid gutters="2%">
+          {FactionQuery.allFactions &&
+          <GridItem width="40%">
+            <Select onChange={handleChangeFaction}>
+              {FactionQuery.allFactions.map(faction => {
+                return <option value={faction.id} key={faction.id}>{faction.name}</option>
+              })}
+            </Select>
+
+            <CardList
+              cards={ShipQuery.allShips}
+              template="ship"
+            />
+
+          </GridItem>
+          }
+          <GridItem width="60%">
+            <h1>Current Squad</h1>
+          </GridItem>
+        </Grid>
       }
     </Wrapper>
   )
@@ -61,7 +74,12 @@ const ShipQuery = gql`
         id: $factionId
       }
     }) {
+      id
       name
+      attack
+      agility
+      hull
+      shields
     }
   }
 `

@@ -2,7 +2,7 @@ import React from 'react'
 import glamorous from 'glamorous'
 
 const StyledWrapper = glamorous.div({
-  maxWidth: 1180,
+  maxWidth: '95%',
   margin: '0 auto'
 })
 

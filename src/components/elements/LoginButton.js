@@ -4,7 +4,7 @@ import Config from '../../config.js'
 import Button from './Button'
 import PersonIcon from '../icons/personIcon'
 import { withRouter } from 'react-router'
-import { gql, graphql, compose, withApollo } from 'react-apollo'
+import { gql, withApollo } from 'react-apollo'
 
 const {clientID, domain} = Config.get().auth
 
@@ -20,22 +20,20 @@ class LoginButton extends React.Component {
   componentDidMount () {
     this._lock.on('authenticated', res => {
       window.localStorage.setItem('auth0IdToken', res.idToken)
-      this.props.userQuery.refetch().then( r => {
-        const {user} = r.data
-        if (user) {
-          this.props.history.replace('/')
-        } else {
-          this.props.createUser({
-            variables: {
-              idToken: window.localStorage.getItem('auth0IdToken')
-            }
-          }).then(() => {
-            this.props.userQuery.refetch().then(() => {
-              this.props.history.replace('/')
+      if (this.props.userQuery) {
+        this.props.userQuery.refetch().then( r => {
+          const {user} = r.data
+          if (user) {
+            this.props.history.replace('/')
+          } else {
+            this.createUser().then(() => {
+              this.props.userQuery.refetch().then(() => {
+                this.props.history.replace('/')
+              })
             })
-          })
-        }
-      })
+          }
+        })
+      }
     })
   }
 
@@ -46,6 +44,21 @@ class LoginButton extends React.Component {
   handleLogout () {
     window.localStorage.removeItem('auth0IdToken')
     this.props.client.resetStore()
+  }
+
+  createUser () {
+    return this.props.client.mutate({
+      mutation: gql`
+        mutation createUser($idToken: String!){
+          createUser(authProvider: {auth0: {idToken: $idToken}}) {
+            id
+          }
+        }
+      `,
+      variables: {
+        idToken: window.localStorage.getItem('auth0IdToken')
+      }
+    })
   }
 
   render () {
@@ -67,16 +80,4 @@ class LoginButton extends React.Component {
   }
 }
 
-const createUserMutation = gql`
-  mutation ($idToken: String){
-    createUser(authProvider: {auth0: {idToken: $idToken}}) {
-      id
-    }
-  }
-`
-
-const LoginWithDataAndMutations = compose(
-  graphql(createUserMutation, {name: 'createUser'})
-)(LoginButton)
-
-export default withApollo(withRouter(LoginWithDataAndMutations))
+export default withRouter(withApollo(LoginButton))

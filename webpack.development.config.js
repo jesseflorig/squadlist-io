@@ -46,6 +46,10 @@ module.exports = {
         exclude: /node_modules/
       },
       {
+        test: /\.svg$/,
+        loader: 'svg-inline-loader'
+      },
+      {
         test: [/\.scss$/],
         loader: ExtractTextPlugin.extract({
           fallback: 'style-loader',
