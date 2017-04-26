@@ -6,6 +6,8 @@ import Select from '../elements/forms/select'
 import Grid from '../layout/Grid'
 import GridItem from '../layout/GridItem'
 import CardList from '../elements/CardList'
+import Squad from '../elements/squad/Squad'
+import Modal from '../elements/modal/Modal'
 import { connect } from 'react-redux'
 import { activateBuilder, setFaction } from '../../state/actions/squadActions'
 import { gql, graphql, compose } from 'react-apollo'
@@ -15,8 +17,9 @@ const HomePage = ({
   handleSetFaction,
   FactionQuery,
   ShipQuery,
-  squad
-}) => {
+  PilotQuery,
+  squad,
+  modal }) => {
 
   const handleChangeFaction = (e) => {
     const faction = e.target.value
@@ -24,37 +27,51 @@ const HomePage = ({
   }
 
   return (
-    <Wrapper>
-      <Button
-        text="New Squad"
-        type="primary"
-        onClick={handleActivateClick}
-        icon={<CreateIcon color="white"/>}/>
+    <div>
+      <Wrapper>
+        <Button
+          text="New Squad"
+          type="primary"
+          onClick={handleActivateClick}
+          icon={<CreateIcon color="white"/>}/>
 
 
-      {squad.isActive &&
-        <Grid gutters="2%">
-          {FactionQuery.allFactions &&
-          <GridItem width="40%">
-            <Select onChange={handleChangeFaction}>
-              {FactionQuery.allFactions.map(faction => {
-                return <option value={faction.id} key={faction.id}>{faction.name}</option>
-              })}
-            </Select>
+        {squad.isActive &&
+          <Grid gutters="2%">
+            {FactionQuery.allFactions &&
+            <GridItem width="40%">
+              <Select onChange={handleChangeFaction}>
+                {FactionQuery.allFactions.map(faction => {
+                  return <option value={faction.id} key={faction.id}>{faction.name}</option>
+                })}
+              </Select>
 
-            <CardList
-              cards={ShipQuery.allShips}
-              template="ship"
-            />
+              <CardList
+                cards={ShipQuery.allShips}
+                template="ship"
+              />
 
-          </GridItem>
-          }
-          <GridItem width="60%">
-            <h1>Current Squad</h1>
-          </GridItem>
-        </Grid>
-      }
-    </Wrapper>
+            </GridItem>
+            }
+            <GridItem width="60%">
+              <h1>Current Squad</h1>
+              <Squad/>
+            </GridItem>
+          </Grid>
+        }
+      </Wrapper>
+
+      <Modal
+        content={
+          <CardList
+            loading={PilotQuery.loading}
+            cards={PilotQuery.allPilots}
+            template="pilot"
+          />
+        }
+        open={modal.open}
+      />
+    </div>
   )
 }
 
@@ -69,11 +86,14 @@ const FactionQuery = gql`
 
 const ShipQuery = gql`
   query allShips($factionId: ID) {
-    allShips(filter: {
-      faction: {
-        id: $factionId
+    allShips(
+      filter: {
+        faction: {
+          id: $factionId
+        }
       }
-    }) {
+      orderBy: name_ASC
+    ) {
       id
       name
       attack
@@ -84,9 +104,30 @@ const ShipQuery = gql`
   }
 `
 
+const PilotQuery = gql`
+  query allPilots($shipId: ID) {
+    allPilots(
+      filter: {
+        ship: {
+          id: $shipId
+        }
+      }
+      orderBy: points_DESC
+    ) {
+      id
+      name
+      slots
+      points
+      skill,
+      unique
+    }
+  }
+`
+
 const mapStateToProps = (state) => {
   return {
-    squad: state.squad
+    squad: state.squad,
+    modal: state.ui.modal
   }
 }
 
@@ -103,6 +144,16 @@ const mapDispatchToProps = (dispatch) => {
 
 const HomePageWithData = compose(
   graphql(FactionQuery, {name: 'FactionQuery'}),
+  graphql(PilotQuery, {
+    name: 'PilotQuery',
+    options: ({squad}) => {
+      return {
+        variables: {
+          shipId: squad.activeShip
+        }
+      }
+    }
+  }),
   graphql(ShipQuery, {
     name: 'ShipQuery',
     options: ({squad}) => {
