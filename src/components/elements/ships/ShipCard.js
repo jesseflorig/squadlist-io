@@ -1,4 +1,7 @@
 import React from 'react'
+import { connect } from 'react-redux'
+import { addShipToSquad } from '../../../state/actions/squadActions'
+import { setModal } from '../../../state/actions/uiActions'
 import glamorous from 'glamorous'
 import SVGInline from 'react-svg-inline'
 import colors from '../../../constants/colors'
@@ -8,26 +11,45 @@ import AgilityIcon from '../../../../public/svg/icons/agility.svg'
 import ShieldIcon from '../../../../public/svg/icons/shield.svg'
 import HullIcon from '../../../../public/svg/icons/hull.svg'
 
-const StyledCardIcon = glamorous.div({
-  width: 150,
+const StyledCard = glamorous.div({
   display: 'flex',
+  flexFlow: 'column'
+})
+
+const CardHeader = glamorous.div({
+  alignItems: 'center',
+  backgroundColor: 'black',
+  display: 'flex',
+  padding: '0 .5rem'
+})
+
+const CardTitle = glamorous.h1({
+  color: 'white'
+})
+
+const CardBody = glamorous.div({
+  display: 'flex',
+  padding: '1rem'
+})
+
+const CardIcon = glamorous.div({
+  width: 50,
+  display: 'flex',
+  marginRight: '1rem',
   '& span': {
     display: 'block'
   },
   '& svg': {
-    height: '100%',
     width: '100%'
+  },
+  '& path': {
+    fill: 'white'
   }
-})
-
-const StyledCard = glamorous.div({
-  display: 'flex',
 })
 
 const Stats = glamorous.div({
   display: 'flex',
-  flexFlow: 'column',
-  marginRight: '1rem'
+  flexFlow: 'row'
 })
 
 const Stat = glamorous.div({
@@ -38,7 +60,7 @@ const Stat = glamorous.div({
   border: '3px solid black',
   color: 'white',
   fontSize: '1.5rem',
-  marginBottom: '.5rem',
+  marginRight: '.5rem',
   '& .SVGInline': {
     width: '24px',
     height: '24px',
@@ -52,35 +74,67 @@ const Stat = glamorous.div({
   }
 }))
 
-const ShipCard = ({card}) => {
+const ShipCard = ({squad, card, addShipToSquad, setModal}) => {
   const {name, attack, agility, shields, hull} = card
   const strippedShipName = name.replace(/(\([^)]*\))/g, '').replace(/[\W]+/ig, '').toLowerCase()
   const cardImage = require(`../../../../public/svg/ships/${strippedShipName}.svg`)
+
+  const handleClick = () => {
+    addShipToSquad(card)
+    setModal()
+  }
+
   return (
-    <StyledCard>
-      <Stats>
-        <Stat color={colors['red']}>
-          <SVGInline svg={AttackIcon}/>
-          <span>{attack}</span>
-        </Stat>
-        <Stat color={colors['green']}>
-          <SVGInline svg={AgilityIcon}/>{agility}
-        </Stat>
-        <Stat color={colors['yellow']}>
-          <SVGInline svg={HullIcon}/>{hull}
-        </Stat>
-        <Stat color={colors['blue']}>
-          <SVGInline svg={ShieldIcon}/>{shields}
-        </Stat>
-      </Stats>
-      {cardImage &&
-      <StyledCardIcon>
-        <SVGInline svg={cardImage}/>
-      </StyledCardIcon>
-      }
-      <h1>{card.name}</h1>
+    <StyledCard onClick={handleClick}>
+      <CardHeader>
+        {cardImage &&
+          <CardIcon>
+            <SVGInline svg={cardImage}/>
+          </CardIcon>
+        }
+        <CardTitle>{card.name}</CardTitle>
+      </CardHeader>
+      <CardBody>
+        <Stats>
+          <Stat color={colors['red']}>
+            <SVGInline svg={AttackIcon}/>
+            <span>{attack}</span>
+          </Stat>
+          <Stat color={colors['green']}>
+            <SVGInline svg={AgilityIcon}/>{agility}
+          </Stat>
+          <Stat color={colors['yellow']}>
+            <SVGInline svg={HullIcon}/>{hull}
+          </Stat>
+          <Stat color={colors['blue']}>
+            <SVGInline svg={ShieldIcon}/>{shields}
+          </Stat>
+        </Stats>
+      </CardBody>
     </StyledCard>
   )
 }
 
-export default ShipCard
+const mapStateToProps = (state) => {
+  return {
+    squad: state.Squad
+  }
+}
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    addShipToSquad: (ship) => {
+      dispatch(addShipToSquad(ship))
+    },
+    setModal: () => {
+      dispatch(setModal())
+    }
+  }
+}
+
+const ShipCardWithState = connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(ShipCard)
+
+export default ShipCardWithState
