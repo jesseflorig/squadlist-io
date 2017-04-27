@@ -5,27 +5,27 @@ import Header from './layout/Header'
 import HomePage from './pages/Home'
 import ShipsPage from './pages/Ships'
 import ShipPage from './pages/Ship'
-import glamorous from 'glamorous'
-
-const StyledPage = glamorous.div({
-  marginTop: '4rem'
-})
-
+import Modal from './elements/modal/Modal'
+import { connect } from 'react-redux'
+import { TweenMax, Power4 } from 'gsap'
 
 class App extends React.Component {
   render() {
+    const {modal} = this.props
     return (
       <Router>
         <div>
           <Header userQuery={this.props.userQuery} />
+          <Switch>
+            <Route exact path="/" component={HomePage}/>
+            <Route exact path="/ships" component={ShipsPage}/>
+            <Route exact path="/ships/:shipId" component={ShipPage}/>
+          </Switch>
 
-          <StyledPage>
-            <Switch>
-              <Route exact path="/" component={HomePage}/>
-              <Route exact path="/ships" component={ShipsPage}/>
-              <Route exact path="/ships/:shipId" component={ShipPage}/>
-            </Switch>
-          </StyledPage>
+          <Modal
+            content={modal.content}
+            open={modal.open}
+          />
         </div>
       </Router>
     )
@@ -47,4 +47,12 @@ const AppWithData = graphql(userQuery, {
   }
 })(App)
 
-export default AppWithData
+const mapStateToProps = (state) => ({
+  modal: state.ui.modal
+})
+
+const AppWithDataAndState = connect(
+  mapStateToProps
+)(AppWithData)
+
+export default AppWithDataAndState

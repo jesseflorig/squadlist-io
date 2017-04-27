@@ -23,7 +23,7 @@ export default function squad(state = initialState, action) {
     return Object.assign({}, state, {
       modal: {
         open: false,
-        content: null
+        content: state.modal.content
       }
     })
   default:

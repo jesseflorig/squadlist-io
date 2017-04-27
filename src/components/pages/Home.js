@@ -1,77 +1,62 @@
 import React from 'react'
 import Wrapper from '../layout/Wrapper'
-import Button from '../elements/Button'
 import CreateIcon from '../icons/createIcon'
-import Select from '../elements/forms/select'
-import Grid from '../layout/Grid'
-import GridItem from '../layout/GridItem'
+import Page from '../layout/Page'
+import SnackBar from '../layout/SnackBar'
 import CardList from '../elements/CardList'
-import Squad from '../elements/squad/Squad'
-import Modal from '../elements/modal/Modal'
 import { connect } from 'react-redux'
-import { activateBuilder, setFaction } from '../../state/actions/squadActions'
+import { setModal } from '../../state/actions/uiActions'
 import { gql, graphql, compose } from 'react-apollo'
+import { chain } from 'lodash'
 
 const HomePage = ({
-  handleActivateClick,
+  setModal,
   handleSetFaction,
   FactionQuery,
   ShipQuery,
   PilotQuery,
-  squad,
-  modal }) => {
+  squad }) => {
 
   const handleChangeFaction = (e) => {
     const faction = e.target.value
     handleSetFaction(faction)
   }
 
-  return (
-    <div>
-      <Wrapper>
-        <Button
-          text="New Squad"
-          type="primary"
-          onClick={handleActivateClick}
-          icon={<CreateIcon color="white"/>}/>
+  const handleNewSquadClick = () => {
 
-
-        {squad.isActive &&
-          <Grid gutters="2%">
-            {FactionQuery.allFactions &&
-            <GridItem width="40%">
-              <Select onChange={handleChangeFaction}>
-                {FactionQuery.allFactions.map(faction => {
-                  return <option value={faction.id} key={faction.id}>{faction.name}</option>
-                })}
-              </Select>
-
-              <CardList
-                cards={ShipQuery.allShips}
-                template="ship"
-              />
-
-            </GridItem>
-            }
-            <GridItem width="60%">
-              <h1>Current Squad</h1>
-              <Squad/>
-            </GridItem>
-          </Grid>
+    // get factions by their parents
+    const factions = chain(FactionQuery.allFactions)
+      .groupBy('parent')
+      .map(parentFaction => {
+        return {
+          name: parentFaction[0].parent,
+          factionIds: parentFaction.map(faction =>  faction.id)
         }
-      </Wrapper>
+      })
+      .value()
 
-      <Modal
-        content={
-          <CardList
-            loading={PilotQuery.loading}
-            cards={PilotQuery.allPilots}
-            template="pilot"
-          />
-        }
-        open={modal.open}
+    const modalContent =
+      <CardList
+        loading={FactionQuery.loading}
+        cards={factions}
+        template="faction"
       />
-    </div>
+
+    setModal(modalContent)
+  }
+
+  return (
+    <Page>
+      <Wrapper>
+        <SnackBar items={[
+          {
+            text: 'New Squad',
+            icon: <CreateIcon color="white"/>,
+            onClick: handleNewSquadClick
+          }
+        ]}/>
+      </Wrapper>
+    </Page>
   )
 }
 
@@ -80,6 +65,7 @@ const FactionQuery = gql`
     allFactions {
       id
       name
+      parent
     }
   }
 `
@@ -133,11 +119,8 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    handleActivateClick: () => {
-      dispatch(activateBuilder())
-    },
-    handleSetFaction: (faction) => {
-      dispatch(setFaction(faction))
+    setModal: (modalContent) => {
+      dispatch(setModal(modalContent))
     }
   }
 }

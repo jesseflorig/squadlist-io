@@ -3,6 +3,7 @@ import glamorous from 'glamorous'
 import colors from '../../constants/colors'
 import ShipCard from './ships/ShipCard'
 import PilotCard from './pilots/PilotCard'
+import FactionCard from './factions/FactionCard'
 import { TweenMax, Power4 } from 'gsap'
 
 const StyledCardList = glamorous.ul({
@@ -12,7 +13,6 @@ const StyledCardList = glamorous.ul({
 })
 
 const StyledCard = glamorous.li({
-  backgroundColor: colors.grey,
   fontFamily: '"Roboto", sans-serif',
   '&:not(:last-of-type)': {
     marginBottom: '1rem'
@@ -22,7 +22,8 @@ const StyledCard = glamorous.li({
 const TemplateMap = (template, item) => {
   const templates = {
     ship: <ShipCard card={item}/>,
-    pilot: <PilotCard card={item}/>
+    pilot: <PilotCard card={item}/>,
+    faction: <FactionCard card={item}/>
   }
 
   return templates[template]
@@ -31,16 +32,18 @@ const TemplateMap = (template, item) => {
 const AnimateIn = {
   y: 0,
   alpha: 1,
+  scale: 1,
   ease: Power4.easeOut
 }
 
 const AnimateReset = {
   y: 10,
-  alpha: 0
+  alpha: 0,
+  scale: 1.1
 }
 
-const StaggerDelay = 0.05
-const Duration = 1
+const StaggerDelay = 0.1
+const Duration = 2
 
 class CardList extends Component {
 
@@ -62,8 +65,7 @@ class CardList extends Component {
   }
 
   render () {
-    const {cards, template, loading} = this.props
-    console.log(loading)
+    const {cards, template} = this.props
     return (
       <StyledCardList>
         {cards && cards.map(item => {

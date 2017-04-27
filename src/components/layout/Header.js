@@ -11,7 +11,6 @@ const StyledHeader = glamorous.div({
   top: 0,
   left: 0,
   width: '100%',
-  backgroundColor: 'black',
   padding: '.5rem',
   zIndex: '100'
 })
@@ -38,11 +37,6 @@ class Header extends React.Component {
   render () {
     return (
       <StyledHeader>
-        <NavList>
-          <NavListItem><Link to="/">Home</Link></NavListItem>
-          <NavListItem><Link to="/ships">Ships</Link></NavListItem>
-        </NavList>
-
         <NavList>
           <NavListItem><LoginButton userQuery={this.props.userQuery}/></NavListItem>
         </NavList>
