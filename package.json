@@ -25,7 +25,7 @@
     "config": "^1.25.1",
     "express": "^4.15.2",
     "glamor": "^2.20.24",
-    "glamorous": "^3.2.0",
+    "glamorous": "^3.11.1",
     "gsap": "^1.19.1",
     "prop-types": "^15.5.7",
     "react": "^15.5.4",
