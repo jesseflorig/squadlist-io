@@ -11,16 +11,10 @@ import { chain } from 'lodash'
 
 const HomePage = ({
   setModal,
-  handleSetFaction,
   FactionQuery,
   ShipQuery,
   PilotQuery,
   squad }) => {
-
-  const handleChangeFaction = (e) => {
-    const faction = e.target.value
-    handleSetFaction(faction)
-  }
 
   const handleNewSquadClick = () => {
 
@@ -48,14 +42,21 @@ const HomePage = ({
   return (
     <Page>
       <Wrapper>
-        <SnackBar items={[
-          {
-            text: 'New Squad',
-            icon: <CreateIcon color="white"/>,
-            onClick: handleNewSquadClick
-          }
-        ]}/>
+        {squad.faction &&
+          <CardList
+            loading={ShipQuery.loading}
+            cards={ShipQuery.allShips}
+            template="ship"
+          />
+        }
       </Wrapper>
+      <SnackBar items={[
+        {
+          text: 'New Squad',
+          icon: <CreateIcon color="white"/>,
+          onClick: handleNewSquadClick
+        }
+      ]}/>
     </Page>
   )
 }
@@ -71,11 +72,13 @@ const FactionQuery = gql`
 `
 
 const ShipQuery = gql`
-  query allShips($factionId: ID) {
+  query allShips($factionIds: [ID!]) {
     allShips(
       filter: {
-        faction: {
-          id: $factionId
+        pilots_some: {
+          faction: {
+            id_in: $factionIds
+          }
         }
       }
       orderBy: name_ASC
@@ -142,7 +145,7 @@ const HomePageWithData = compose(
     options: ({squad}) => {
       return {
         variables: {
-          factionId: squad.faction
+          factionIds: squad.faction
         }
       }
     }
