@@ -1,6 +1,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { setFaction } from '../../../state/actions/squadActions'
+import { closeModal } from '../../../state/actions/uiActions'
 import glamorous from 'glamorous'
 import SVGInline from 'react-svg-inline'
 import ScumIcon from '../../../../public/svg/icons/scum.svg'
@@ -50,10 +51,12 @@ const IconMap = {
   'REBEL': RebelIcon
 }
 
-const FactionCard = ({card, setFaction}) => {
-  const name = card.name
+const FactionCard = ({card, setFaction, closeModal}) => {
+  console.log(card)
+  const {name, factionIds} = card
   const handleClick = () => {
-    setFaction(card.id)
+    setFaction(factionIds)
+    closeModal()
   }
   const factionIcon = IconMap[name]
 
@@ -87,6 +90,9 @@ const mapDispatchToProps = (dispatch) => {
   return {
     setFaction: (faction) => {
       dispatch(setFaction(faction))
+    },
+    closeModal: () => {
+      dispatch(closeModal())
     }
   }
 }
