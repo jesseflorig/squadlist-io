@@ -1,5 +1,4 @@
 import React from 'react'
-import { Link } from 'react-router-dom'
 import glamorous from 'glamorous'
 import LoginButton from '../elements/LoginButton'
 
@@ -24,13 +23,6 @@ const NavList = glamorous.ul({
 
 const NavListItem = glamorous.li({
   fontFamily: '"Roboto", sans-serif',
-  '& a': {
-    color: 'white',
-    textDecoration: 'none'
-  },
-  '&:not(:last-of-type)': {
-    marginRight: '.5rem'
-  }
 })
 
 class Header extends React.Component {

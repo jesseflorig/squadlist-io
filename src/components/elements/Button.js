@@ -25,7 +25,6 @@ const ButtonWithStyles = glamorous.button({
   fontFamily: '"Roboto", sans-serif',
   cursor: 'pointer',
   fontSize: '1rem',
-  transition: 'background-color 150ms ease-out',
   '& svg': {
     marginRight: '.5rem'
   }

@@ -7,7 +7,7 @@ const initialState = {
   isActive: false,
   ships: [],
   activeShip: null,
-  faction: ''
+  faction: null
 }
 
 export default function squad(state = initialState, action) {

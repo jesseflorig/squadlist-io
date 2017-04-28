@@ -9,16 +9,12 @@ import ImperialIcon from '../../../../public/svg/icons/imperial.svg'
 import RebelIcon from '../../../../public/svg/icons/rebellion.svg'
 import colors from '../../../constants/colors'
 
-const StyledCard = glamorous.li({
+const StyledCard = glamorous.div({
   display: 'flex',
   flex: 1,
   flexFlow: 'column',
   alignItems: 'center',
-  justifyContent: 'center',
-  backgroundColor: `${colors.secondary}`,
-  '&:not(:first-of-type)': {
-    marginTop: '1rem'
-  }
+  justifyContent: 'center'
 })
 
 const CardIcon = glamorous.div({
@@ -52,7 +48,6 @@ const IconMap = {
 }
 
 const FactionCard = ({card, setFaction, closeModal}) => {
-  console.log(card)
   const {name, factionIds} = card
   const handleClick = () => {
     setFaction(factionIds)

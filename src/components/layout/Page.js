@@ -2,30 +2,14 @@ import React, {Component} from 'react'
 import { connect } from 'react-redux'
 import glamorous from 'glamorous'
 import colors from '../../constants/colors.js'
-import { TweenMax, Power4 } from 'gsap'
 
 const StyledPage = glamorous.div({
   paddingTop: '4rem',
   minHeight: '100vh',
-  backgroundImage: `linear-gradient(${colors.primary}, ${colors.secondary})`
+  backgroundImage: `linear-gradient(${colors.grey}, ${colors.darkerGrey})`
 })
 
 class Page extends Component {
-  componentDidMount () {
-    TweenMax.set(this._page, {
-      scale: 1
-    })
-  }
-
-  componentDidUpdate () {
-    const {modal} = this.props
-    const {open} = modal
-    TweenMax.to(this._page, 1, {
-      scale: open ? 0.9 : 1,
-      ease: Power4.easeOut
-    })
-  }
-
   render () {
     return(
       <StyledPage innerRef={c => this._page = c}>

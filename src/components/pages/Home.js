@@ -8,6 +8,7 @@ import { connect } from 'react-redux'
 import { setModal } from '../../state/actions/uiActions'
 import { gql, graphql, compose } from 'react-apollo'
 import { chain } from 'lodash'
+import colors from '../../constants/colors'
 
 const HomePage = ({
   setModal,
@@ -53,7 +54,7 @@ const HomePage = ({
       <SnackBar items={[
         {
           text: 'New Squad',
-          icon: <CreateIcon color="white"/>,
+          icon: <CreateIcon color={colors.accent}/>,
           onClick: handleNewSquadClick
         }
       ]}/>

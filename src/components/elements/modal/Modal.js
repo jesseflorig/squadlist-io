@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import glamorous from 'glamorous'
 import { closeModal } from '../../../state/actions/uiActions'
-import { TweenMax, Power4 } from 'gsap'
+import { TweenMax, Power2 } from 'gsap'
 import SVGInline from 'react-svg-inline'
 import colors from '../../../constants/colors'
 import CloseIcon from '../../../../public/svg/icons/close.svg'
@@ -17,7 +17,7 @@ const StyledModal = glamorous.div({
   display: 'flex',
   justifyContent: 'center',
   alignItems: 'center',
-  backgroundImage: `linear-gradient(${colors.primary}, ${colors.secondary})`
+  backgroundImage: `linear-gradient(${colors.grey}, ${colors.darkerGrey})`
 }, (props) => ({
   pointerEvents: props.open ? 'all' : 'none',
   opacity: props.open ? 1 : 0
@@ -26,7 +26,8 @@ const StyledModal = glamorous.div({
 const ModalInner = glamorous.div({
   position: 'relative',
   padding: '2rem',
-  backgroundColor: 'white',
+  backgroundColor: colors.darkerGrey,
+  border: '1px solid white',
   width: '90%',
   height: '90%',
   overflow: 'auto',
@@ -57,9 +58,9 @@ class Modal extends Component{
     let animation = {
       alpha: this.props.open ? 1 : 0,
       scale: this.props.open ? 1 : 1.1,
-      ease: Power4.easeOut
+      ease: Power2.easeInOut
     }
-    TweenMax.to(this._modal, 1, animation)
+    TweenMax.to(this._modal, 0.75, animation)
   }
 
   render () {

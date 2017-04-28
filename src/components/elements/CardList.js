@@ -1,10 +1,10 @@
 import React, { Component } from 'react'
 import glamorous from 'glamorous'
-import colors from '../../constants/colors'
 import ShipCard from './ships/ShipCard'
 import PilotCard from './pilots/PilotCard'
 import FactionCard from './factions/FactionCard'
-import { TweenMax, Power4 } from 'gsap'
+import { TweenMax, Power2 } from 'gsap'
+import colors from '../../constants/colors'
 
 const StyledCardList = glamorous.ul({
   listStyle: 'none',
@@ -14,9 +14,7 @@ const StyledCardList = glamorous.ul({
 
 const StyledCard = glamorous.li({
   fontFamily: '"Roboto", sans-serif',
-  '&:not(:last-of-type)': {
-    marginBottom: '1rem'
-  }
+  borderBottom: `1px solid ${colors.mediumGrey}`
 })
 
 const TemplateMap = (template, item) => {
@@ -30,20 +28,19 @@ const TemplateMap = (template, item) => {
 }
 
 const AnimateIn = {
-  y: 0,
   alpha: 1,
   scale: 1,
-  ease: Power4.easeOut
+  delay: 0.25,
+  ease: Power2.easeInOut
 }
 
 const AnimateReset = {
-  y: 10,
   alpha: 0,
   scale: 1.1
 }
 
 const StaggerDelay = 0.1
-const Duration = 2
+const Duration = 1
 
 class CardList extends Component {
 

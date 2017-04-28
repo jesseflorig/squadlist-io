@@ -69,7 +69,7 @@ class LoginButton extends React.Component {
       return(
         <Button
           text={label}
-          type="primary"
+          type="accent"
           size="small"
           icon={<PersonIcon color='white'/>}
           onClick={handleClick}/>

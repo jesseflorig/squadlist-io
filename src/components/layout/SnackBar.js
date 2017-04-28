@@ -23,7 +23,7 @@ const SnackBarItem = glamorous.div({
   fontFamily: 'Roboto',
   display: 'flex',
   alignItems: 'center',
-  color: 'white',
+  color: colors.accent,
   '& span': {
     marginLeft: '.25rem'
   }

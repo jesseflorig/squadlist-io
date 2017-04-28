@@ -7,7 +7,6 @@ import ShipsPage from './pages/Ships'
 import ShipPage from './pages/Ship'
 import Modal from './elements/modal/Modal'
 import { connect } from 'react-redux'
-import { TweenMax, Power4 } from 'gsap'
 
 class App extends React.Component {
   render() {
