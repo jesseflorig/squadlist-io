@@ -48,25 +48,33 @@ const ModalToggle = glamorous.div({
 class Modal extends Component{
 
   componentDidMount() {
-    TweenMax.set(this._modal, {
+    this.resetModal(this._modal)
+  }
+
+  componentDidUpdate () {
+    const {isOpen} = this.props
+    let animation = {
+      alpha: open ? 1 : 0,
+      scale: open ? 1 : 0.9,
+      ease: Power2.easeInOut,
+      onComplete: isOpen ? null : this.resetModal
+    }
+
+    TweenMax.to(this._modal, 0.75, animation)
+  }
+
+  resetModal (modal) {
+    // reset modal on mount or when modal is closed via TweenMax onComplete callback
+    TweenMax.set(modal || this.target, {
       alpha: 0,
       scale: 1.1
     })
   }
 
-  componentDidUpdate () {
-    let animation = {
-      alpha: this.props.open ? 1 : 0,
-      scale: this.props.open ? 1 : 1.1,
-      ease: Power2.easeInOut
-    }
-    TweenMax.to(this._modal, 0.75, animation)
-  }
-
   render () {
-    const {content, open, closeModal} = this.props
+    const {content, isOpen, closeModal} = this.props
     return (
-      <StyledModal innerRef={c => this._modal = c} open={open}>
+      <StyledModal innerRef={c => this._modal = c} open={isOpen}>
         <ModalToggle onClick={closeModal}>
           <SVGInline svg={CloseIcon}/>
         </ModalToggle>
@@ -75,19 +83,22 @@ class Modal extends Component{
         </ModalInner>
       </StyledModal>
     )
-  }
+  } 
 }
 
-const mapDispatchToProps = (dispatch) => {
-  return {
-    closeModal: () => {
-      dispatch(closeModal())
-    }
+const mapStateToProps = (state) => ({
+  isOpen: state.ui.modalOpen,
+  content: state.ui.modalContent
+})
+
+const mapDispatchToProps = (dispatch) => ({
+  closeModal: () => {
+    dispatch(closeModal())
   }
-}
+})
 
 const ModalWithState = connect(
-  null,
+  mapStateToProps,
   mapDispatchToProps
 )(Modal)
 

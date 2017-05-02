@@ -29,14 +29,14 @@ const TemplateMap = (template, item) => {
 
 const AnimateIn = {
   alpha: 1,
-  scale: 1,
-  delay: 0.25,
+  y: 0,
+  delay: 0.15,
   ease: Power2.easeInOut
 }
 
 const AnimateReset = {
   alpha: 0,
-  scale: 1.1
+  y: 10
 }
 
 const StaggerDelay = 0.1
@@ -49,7 +49,6 @@ class CardList extends Component {
   }
 
   componentDidUpdate () {
-    // TweenMax.killAll()
     this.animateCardList(`.${this.props.template}-card`)
   }
 
@@ -65,9 +64,13 @@ class CardList extends Component {
     const {cards, template} = this.props
     return (
       <StyledCardList>
-        {cards && cards.map(item => {
+        {cards && cards.map((item, index) => {
           return (
-            <StyledCard ref={c => this._card = c} className={`${template}-card`} key={item.id}>
+            <StyledCard
+              ref={c => this._card = c}
+              className={`${template}-card`}
+              key={`${item.name}-${index}`}
+            >
               {TemplateMap(template, item)}
             </StyledCard>
           )

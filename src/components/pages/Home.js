@@ -116,8 +116,7 @@ const PilotQuery = gql`
 
 const mapStateToProps = (state) => {
   return {
-    squad: state.squad,
-    modal: state.ui.modal
+    squad: state.squad
   }
 }
 

@@ -1,8 +1,9 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { addShipToSquad } from '../../../state/actions/squadActions'
-import { setModal } from '../../../state/actions/uiActions'
+import { setDrawer } from '../../../state/actions/uiActions'
 import glamorous from 'glamorous'
+import CardList from '../CardList'
 import SVGInline from 'react-svg-inline'
 import colors from '../../../constants/colors'
 import AddIcon from '../../icons/addIcon'
@@ -51,9 +52,6 @@ const CardIcon = glamorous.div({
   }
 })
 
-const AddIconStyled = glamorous.div({
-})
-
 const Stats = glamorous.div({
   display: 'flex',
   flexFlow: 'row'
@@ -80,14 +78,18 @@ const Stat = glamorous.div({
   }
 }))
 
-const ShipCard = ({card, addShipToSquad, setModal}) => {
+const ShipCard = ({card, addShipToSquad, setDrawer}) => {
   const {name, attack, agility, shields, hull} = card
   const strippedShipName = name.replace(/(\([^)]*\))/g, '').replace(/[\W]+/ig, '').toLowerCase()
   const cardImage = require(`../../../../public/svg/ships/${strippedShipName}.svg`)
 
+  const drawerContent =
+    <CardList
+      template="pilot"
+    />
   const handleClick = () => {
-    addShipToSquad(card)
-    setModal()
+    // addShipToSquad(card)
+    setDrawer(drawerContent)
   }
 
   return (
@@ -122,22 +124,18 @@ const ShipCard = ({card, addShipToSquad, setModal}) => {
   )
 }
 
-const mapStateToProps = (state) => {
-  return {
-    squad: state.Squad
-  }
-}
+const mapStateToProps = (state) => ({
+  squad: state.Squad
+})
 
-const mapDispatchToProps = (dispatch) => {
-  return {
-    addShipToSquad: (ship) => {
-      dispatch(addShipToSquad(ship))
-    },
-    setModal: () => {
-      dispatch(setModal())
-    }
+const mapDispatchToProps = (dispatch) => ({
+  addShipToSquad: (ship) => {
+    dispatch(addShipToSquad(ship))
+  },
+  setDrawer: (drawerContent) => {
+    dispatch(setDrawer(drawerContent))
   }
-}
+})
 
 const ShipCardWithState = connect(
   mapStateToProps,

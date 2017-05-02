@@ -32,10 +32,10 @@ const SnackBarItem = glamorous.div({
 const SnackBar = ({items}) => {
   return (
     <StyledSnackBar>
-      {items.map(item => {
+      {items.map((item, index) => {
         const {onClick, icon, text} = item
         return (
-          <SnackBarItem onClick={onClick}>
+          <SnackBarItem onClick={onClick} key={index}>
             {icon && <span>{icon}</span>}
             {text && <span>{text}</span>}
           </SnackBarItem>
