@@ -54,8 +54,8 @@ class Modal extends Component{
   componentDidUpdate () {
     const {isOpen} = this.props
     let animation = {
-      alpha: open ? 1 : 0,
-      scale: open ? 1 : 0.9,
+      alpha: isOpen ? 1 : 0,
+      scale: isOpen ? 1 : 0.9,
       ease: Power2.easeInOut,
       onComplete: isOpen ? null : this.resetModal
     }
@@ -83,7 +83,7 @@ class Modal extends Component{
         </ModalInner>
       </StyledModal>
     )
-  } 
+  }
 }
 
 const mapStateToProps = (state) => ({
