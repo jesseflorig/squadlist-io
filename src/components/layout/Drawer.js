@@ -7,6 +7,7 @@ import colors from '../../constants/colors'
 import Color from 'color'
 import SVGInline from 'react-svg-inline'
 import CloseIcon from '../../../public/svg/icons/close.svg'
+import PilotList from '../elements/pilots/PilotList'
 
 const StyledDrawer = glamorous.div({
   position: 'fixed',
@@ -34,7 +35,7 @@ const DrawerOverlay = glamorous.div({
 
 const DrawerInner = glamorous.div({
   position: 'relative',
-  padding: '2rem',
+  padding: '3rem 1rem',
   backgroundColor: colors.darkerGrey,
   width: '80%',
   height: '100%',
@@ -80,6 +81,9 @@ class Drawer extends Component{
 
   render () {
     const {closeDrawer, isOpen, content} = this.props
+    const contentMap = {
+      'PilotList': <PilotList/>
+    }
     return (
       <StyledDrawer innerRef={c => this._container = c} open={isOpen}>
         <DrawerOverlay innerRef={c => this._overlay = c}/>
@@ -87,7 +91,7 @@ class Drawer extends Component{
           <DrawerToggle onClick={closeDrawer}>
             <SVGInline svg={CloseIcon}/>
           </DrawerToggle>
-          {content}
+          {contentMap[content]}
         </DrawerInner>
       </StyledDrawer>
     )

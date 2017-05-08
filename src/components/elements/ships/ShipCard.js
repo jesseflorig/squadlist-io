@@ -3,14 +3,9 @@ import { connect } from 'react-redux'
 import { addShipToSquad } from '../../../state/actions/squadActions'
 import { setDrawer } from '../../../state/actions/uiActions'
 import glamorous from 'glamorous'
-import CardList from '../CardList'
 import SVGInline from 'react-svg-inline'
 import colors from '../../../constants/colors'
 import AddIcon from '../../icons/addIcon'
-import AttackIcon from '../../../../public/svg/icons/attack.svg'
-import AgilityIcon from '../../../../public/svg/icons/agility.svg'
-import ShieldIcon from '../../../../public/svg/icons/shield.svg'
-import HullIcon from '../../../../public/svg/icons/hull.svg'
 
 const StyledCard = glamorous.div({
   display: 'flex',
@@ -32,6 +27,7 @@ const CardTitle = glamorous.h1({
 
 const CardBody = glamorous.div({
   display: 'flex',
+  flexFlow: 'column',
   marginTop: '1rem'
 })
 
@@ -66,30 +62,44 @@ const Stat = glamorous.div({
   color: 'white',
   fontSize: '.9rem',
   marginRight: '.5rem',
-  '& .SVGInline': {
+  '& svg': {
     width: '24px',
     height: '24px',
     marginRight: '.5rem'
   },
 }, ({color}) => ({
   borderColor: color,
-  '& path': {
+  '& svg': {
     fill: color
   }
 }))
 
+const Actions = glamorous.div({
+  display: 'flex',
+  marginTop: '1rem',
+  padding: '1rem 0'
+})
+
+const Action = glamorous.div({
+  position: 'relative',
+  display: 'flex',
+  alignItems: 'center',
+  border: `1px solid ${colors.offWhite}`,
+  padding: '.25rem',
+  marginRight: '.5rem',
+  borderRadius: '3px',
+  '& svg': {
+    fill: colors.offWhite
+  },
+})
+
 const ShipCard = ({card, addShipToSquad, setDrawer}) => {
-  const {name, attack, agility, shields, hull} = card
+  const {name, attack, agility, shields, hull, actions} = card
   const strippedShipName = name.replace(/(\([^)]*\))/g, '').replace(/[\W]+/ig, '').toLowerCase()
   const cardImage = require(`../../../../public/svg/ships/${strippedShipName}.svg`)
-
-  const drawerContent =
-    <CardList
-      template="pilot"
-    />
   const handleClick = () => {
-    // addShipToSquad(card)
-    setDrawer(drawerContent)
+    addShipToSquad(card)
+    setDrawer('PilotList')
   }
 
   return (
@@ -106,27 +116,45 @@ const ShipCard = ({card, addShipToSquad, setDrawer}) => {
       <CardBody>
         <Stats>
           <Stat color={colors['red']}>
-            <SVGInline svg={AttackIcon}/>
+            <svg>
+              <use href='#Attack'/>
+            </svg>
             <span>{attack}</span>
           </Stat>
           <Stat color={colors['green']}>
-            <SVGInline svg={AgilityIcon}/>{agility}
+            <svg>
+              <use href='#Agility'/>
+            </svg>
+            {agility}
           </Stat>
           <Stat color={colors['yellow']}>
-            <SVGInline svg={HullIcon}/>{hull}
+            <svg>
+              <use href='#Hull'/>
+            </svg>
+            {hull}
           </Stat>
           <Stat color={colors['blue']}>
-            <SVGInline svg={ShieldIcon}/>{shields}
+            <svg>
+              <use href='#Shields'/>
+            </svg>
+            {shields}
           </Stat>
         </Stats>
+        <Actions>
+          {actions.map(action => {
+            return (
+              <Action>
+                <svg height="24" width="24">
+                  <use href={`#${action}`}/>
+                </svg>
+              </Action>
+            )
+          })}
+        </Actions>
       </CardBody>
     </StyledCard>
   )
 }
-
-const mapStateToProps = (state) => ({
-  squad: state.Squad
-})
 
 const mapDispatchToProps = (dispatch) => ({
   addShipToSquad: (ship) => {
@@ -138,7 +166,7 @@ const mapDispatchToProps = (dispatch) => ({
 })
 
 const ShipCardWithState = connect(
-  mapStateToProps,
+  null,
   mapDispatchToProps
 )(ShipCard)
 

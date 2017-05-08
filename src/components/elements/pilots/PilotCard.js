@@ -1,42 +1,7 @@
 import React from 'react'
-import { connect } from 'react-redux'
 import glamorous from 'glamorous'
-import SVGInline from 'react-svg-inline'
-import { countBy, map } from 'lodash'
-
-import EliteIcon from '../../../../public/svg/icons/elitepilottalent.svg'
-import MissleIcon from '../../../../public/svg/icons/missle.svg'
-import BombIcon from '../../../../public/svg/icons/bomb.svg'
-import IllicitIcon from '../../../../public/svg/icons/illicit.svg'
-import CrewIcon from '../../../../public/svg/icons/crew.svg'
-import CannonIcon from '../../../../public/svg/icons/cannon.svg'
-import TorpedoIcon from '../../../../public/svg/icons/torpedo.svg'
-import TeamIcon from '../../../../public/svg/icons/team.svg'
-import CargoIcon from '../../../../public/svg/icons/cargo.svg'
-import AstromechIcon from '../../../../public/svg/icons/astromech.svg'
-import SalvagedAstromechIcon from '../../../../public/svg/icons/salvagedastromech.svg'
-import ModificationIcon from '../../../../public/svg/icons/modification.svg'
-import TechIcon from '../../../../public/svg/icons/tech.svg'
-import TurretIcon from '../../../../public/svg/icons/turret.svg'
-import TitleIcon from '../../../../public/svg/icons/title.svg'
-
-const IconMap = {
-  'Elite': EliteIcon,
-  'Missile': MissleIcon,
-  'Bomb': BombIcon,
-  'Illicit': IllicitIcon,
-  'Crew': CrewIcon,
-  'Cannon': CannonIcon,
-  'Torpedo': TorpedoIcon,
-  'Astromech': AstromechIcon,
-  'Salvaged Astromech': SalvagedAstromechIcon,
-  'Team': TeamIcon,
-  'Cargo': CargoIcon,
-  'Modification': ModificationIcon,
-  'Tech': TechIcon,
-  'Turret': TurretIcon,
-  'Title': TitleIcon
-}
+import { chain, map } from 'lodash'
+import colors from '../../../constants/colors'
 
 const StyledCard = glamorous.div({
   display: 'flex',
@@ -45,25 +10,47 @@ const StyledCard = glamorous.div({
 
 const CardHeader = glamorous.div({
   alignItems: 'center',
-  backgroundColor: 'black',
   display: 'flex',
-  padding: '0 .5rem',
+  padding: '1rem .5rem',
   justifyContent: 'space-between'
 })
 
 const CardTitle = glamorous.h1({
-  color: 'white',
-  fontSize: '1.3rem',
-  marginRight: '2rem'
+  color: colors.offWhite,
+  fontSize: '1.2rem',
+  fontWeight: 900,
+  margin: 0
 })
 
-const CardPoints = glamorous.span({
-  display: 'inline-block',
-  color: 'white'
+const PilotSkill = glamorous.span({
+  color: 'orange',
+  fontFamily: 'kimberleyblack',
+  border: '1px solid orange',
+  padding: '.5rem',
+  borderRadius: '3px',
+  marginRight: '.5rem'
 })
+
+const PilotPoints = glamorous.span({
+  fontFamily: 'kimberleyblack',
+  border: `1px solid ${colors.offWhite}`,
+  padding: '.5rem',
+  display: 'inline-block',
+  color: colors.offWhite,
+  borderRadius: '3px'
+})
+
+const PilotTalent = glamorous.p({
+  color: colors.offWhite,
+  margin: 0,
+  fontWeight: 100,
+  lineHeight: 1.5
+})
+
 
 const CardBody = glamorous.div({
   display: 'flex',
+  flexFlow: 'column',
   padding: '1rem'
 })
 
@@ -83,17 +70,24 @@ const CardIcon = glamorous.div({
 })
 
 const Slots = glamorous.div({
-  display: 'flex'
+  display: 'flex',
+  padding: '2rem 0'
 })
 
 const Slot = glamorous.div({
-  display: 'block'
+  display: 'block',
+  '& svg': {
+    fill: colors.offWhite
+  }
 })
 
 
 const PilotCard = ({card}) => {
-  const {name, slots} = card
-  const groupSlots = countBy(slots, slot => slot)
+  const {name, slots, skill, text, points} = card
+  const groupSlots = chain(slots)
+    .orderBy(slot => slot)
+    .value()
+
   const handleClick = () => {
 
   }
@@ -101,17 +95,23 @@ const PilotCard = ({card}) => {
   return (
     <StyledCard onClick={handleClick}>
       <CardHeader>
-        <CardTitle dangerouslySetInnerHTML={{__html: `${card.name}`}}/>
-        <CardPoints>{card.points}</CardPoints>
+        <PilotSkill>{skill}</PilotSkill>
+        <CardTitle dangerouslySetInnerHTML={{__html: `${name}`}}/>
+        <PilotPoints>{points}</PilotPoints>
       </CardHeader>
       <CardBody>
+        <PilotTalent>
+          {text}
+        </PilotTalent>
         <Slots>
-          {map(groupSlots, (count, slotName) => {
-            const icon = IconMap[slotName]
+          {map(groupSlots, (slotName, index) => {
             return (
-              <Slot key={`${name}-${slotName}`}>
+              <Slot key={`${index}-${slotName}`}>
                 <CardIcon>
-                  <SVGInline svg={icon} />
+                  <svg height='24' width='24'>
+                    <title>{slotName}</title>
+                    <use href={`#${slotName}`}></use>
+                  </svg>
                 </CardIcon>
               </Slot>
             )
@@ -122,21 +122,4 @@ const PilotCard = ({card}) => {
   )
 }
 
-const mapStateToProps = (state) => {
-  return {
-    squad: state.Squad
-  }
-}
-
-const mapDispatchToProps = (dispatch) => {
-  return {
-
-  }
-}
-
-const PilotCardWithState = connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(PilotCard)
-
-export default PilotCardWithState
+export default PilotCard
