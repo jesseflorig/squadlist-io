@@ -1,0 +1,7 @@
+@font-face {
+  font-family: 'kimberleyblack';
+  src: url('../../public/fonts/kimberley_bl-webfont.woff2') format('woff2'),
+       url('../../public/fonts/kimberley_bl-webfont.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+}

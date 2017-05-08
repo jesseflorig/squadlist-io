@@ -36,18 +36,16 @@ module.exports = {
       },
       {
         test: [/\.css$/],
-        loader: ExtractTextPlugin.extract({
-          fallback: 'style-loader',
-          use: [
-            'css-loader?modules&importLoaders=1&localIdentName=[name]__[local]',
-            'postcss-loader'
-          ]
-        }),
+        use: ['style-loader', 'css-loader'],
         exclude: /node_modules/
       },
       {
         test: /\.svg$/,
         loader: 'svg-inline-loader'
+      },
+      {
+        test: /\.(eot|ttf|woff|woff2)$/,
+        loader: 'file-loader?name=public/fonts/[name].[ext]'
       },
       {
         test: [/\.scss$/],
@@ -71,7 +69,10 @@ module.exports = {
       inject: 'body',
       filename: 'index.html'
     }),
-    new WriteFilePlugin(),
+    new WriteFilePlugin({
+      // exclude hot-update files
+      test: /^(?!.*(hot)).*/
+    }),
     new ExtractTextPlugin({
       filename: 'app.css',
       allChunks: true
