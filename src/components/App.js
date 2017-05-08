@@ -3,22 +3,19 @@ import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
 import { gql, graphql } from 'react-apollo'
 import Header from './layout/Header'
 import HomePage from './pages/Home'
-import ShipsPage from './pages/Ships'
-import ShipPage from './pages/Ship'
 import Modal from './elements/modal/Modal'
 import Drawer from './layout/Drawer'
-import { connect } from 'react-redux'
+import Icons from './elements/Icons'
 
 class App extends React.Component {
   render() {
     return (
       <Router>
         <div>
+          <Icons/>
           <Header userQuery={this.props.userQuery} />
           <Switch>
             <Route exact path="/" component={HomePage}/>
-            <Route exact path="/ships" component={ShipsPage}/>
-            <Route exact path="/ships/:shipId" component={ShipPage}/>
           </Switch>
 
           <Modal/>
